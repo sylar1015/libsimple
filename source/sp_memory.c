@@ -35,7 +35,7 @@ void *sp_calloc(size_t n, size_t size)
 
     if (likely(ptr))
     {
-    //    sp_bzero(ptr, malloc_size);
+        sp_bzero(ptr, malloc_size);
     }
 
     return ptr;
