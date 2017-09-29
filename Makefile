@@ -21,4 +21,3 @@ shared:
 clean:
 	rm -rf obj
 	rm -rf *.o
-	rm -rf lib
