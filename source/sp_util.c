@@ -26,7 +26,7 @@ inline uint32_t sp_log2(uint32_t x)
         : [x] "mr" (x))
     return res;
 #else
-    return __builtin_cls(x) ^ 31;
+    return __builtin_clz(x) ^ 31;
 #endif
 }
 

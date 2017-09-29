@@ -1,3 +1,7 @@
+# Source Insight
+libsimple.*
+
+tests/a.out
 # Prerequisites
 *.d
 

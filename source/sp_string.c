@@ -17,6 +17,8 @@
 
 #include "sp.h"
 
+#include <stdarg.h>
+
 inline size_t sp_string_length(const char *str)
 {
     return strlen(str); 
@@ -25,4 +27,46 @@ inline size_t sp_string_length(const char *str)
 inline void sp_string_copy(char *dst, const char *src)
 {
     strcpy(dst, src);
+}
+
+inline void sp_string_clear(char *str)
+{
+    str[0] = 0;
+}
+
+inline bool sp_string_empty(const char *str)
+{
+    return str[0] == 0;
+}
+
+bool sp_string_equal(const char *str1, const char *str2)
+{
+    return 0 == strcmp(str1, str2);
+}
+
+int sp_string_find(const char *str, const char *sub)
+{
+    const char *p = strstr(str, sub);
+    return p ? p - str : -1;
+}
+
+bool sp_string_startswith(const char *str, const char* sub)
+{
+    return 0 == sp_string_find(str, sub);
+}
+
+bool sp_string_endswith(const char *str, const char *sub)
+{
+    int pos = sp_string_find(str, sub);
+    return sp_string_length(sub) + pos == sp_string_length(str);
+}
+
+void sp_string_append(char *buffer, const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+
+    vsprintf(buffer + sp_string_length(buffer), format, args);
+
+    va_end(args);
 }

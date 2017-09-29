@@ -17,6 +17,8 @@
 
 #include "sp.h"
 
+#include <stdlib.h>
+
 inline void *sp_malloc(size_t size)
 {
     size_t aligned_size = sp_roundup2n(size);

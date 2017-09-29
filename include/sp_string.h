@@ -18,6 +18,8 @@
 #ifndef _SP_STRING_H_
 #define _SP_STRING_H_
 
+#include <stdbool.h>
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -25,6 +27,14 @@ extern "C"
 
 size_t sp_string_length(const char *str);
 void sp_string_copy(char *dst, const char *src);
+void sp_string_clear(char *str);
+bool sp_string_empty(const char *str);
+bool sp_string_equal(const char *str1, const char *str2);
+bool sp_string_startswith(const char *str, const char*sub);
+bool sp_string_endswith(const char *str, const char *sub);
+int sp_string_find(const char *str, const char *sub);
+void sp_string_append(char *buffer, const char *format, ...);
+
 
 #ifdef __cplusplus
 }
