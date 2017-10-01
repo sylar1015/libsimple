@@ -34,6 +34,9 @@ void sp_copy(void *dst, const void *src, size_t size);
 
 int sp_regex(const char *pattern, const char *text, ...);
 
+uint64_t sp_now();
+uint64_t sp_timeofday();
+
 #ifdef __cplusplus
 }
 #endif

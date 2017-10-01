@@ -23,11 +23,11 @@
 
 inline uint32_t sp_log2(uint32_t x)
 {
-#if defined(__i386) || defined(__86__64__)
+#if defined(__i386) || defined(__x86_64)
     uint32_t res;
     asm ("bsr %[x], %[res]"
         : [res] "=r" (res)
-        : [x] "mr" (x))
+        : [x] "mr" (x));
     return res;
 #else
     return __builtin_clz(x) ^ 31;
@@ -86,3 +86,15 @@ int sp_regex(const char *pattern, const char *text, ...)
     return 0;
 }
 
+uint64_t sp_now()
+{
+    return time(NULL);
+}
+
+uint64_t sp_timeofday()
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+
+    return (tv.tv_sec * 1000000 + tv.tv_usec);
+}
