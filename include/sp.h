@@ -34,6 +34,7 @@
 #include "sp_string.h"
 #include "sp_macros.h"
 #include "sp_memory.h"
+#include "sp_thread.h"
 #include "sp_reactor.h"
 
 #endif

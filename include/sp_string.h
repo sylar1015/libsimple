@@ -35,7 +35,6 @@ bool sp_string_endswith(const char *str, const char *sub);
 int sp_string_find(const char *str, const char *sub);
 void sp_string_append(char *buffer, const char *format, ...);
 
-
 #ifdef __cplusplus
 }
 #endif

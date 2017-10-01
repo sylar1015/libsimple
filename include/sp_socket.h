@@ -18,6 +18,11 @@
 #ifndef _SP_SOCKET_H_
 #define _SP_SOCKET_H_
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/tcp.h>
@@ -49,5 +54,9 @@ uint32_t sp_htonl(uint32_t hostlong);
 uint16_t sp_htons(uint16_t hostshort);
 uint32_t sp_ntohl(uint32_t netlong);
 uint16_t sp_ntohs(uint16_t netshort);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

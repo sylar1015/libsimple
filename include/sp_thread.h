@@ -15,31 +15,26 @@
    License along with the Simple Library; if not, see
    <http://www.gnu.org/licenses/>.  */
 
-#ifndef _SP_REACTOR_H_
-#define _SP_REACTOR_H_
+#ifndef _SP_THREAD_H_
+#define _SP_THREAD_H_
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-typedef void (*sp_reactor_callback)(int sock, void *arg);
-   
-enum
-{
-    SP_REACTOR_RUN_FOREVER,
-    SP_REACTOR_RUN_THREAD,
-};
-   
-void *sp_reactor_new(const char *method);
-void sp_reactor_free(void *h);
-void *sp_reactor_attach(void *h, int sock, sp_reactor_callback cb, void *arg);
-void *sp_reactor_attach_once(void *h, int sock, sp_reactor_callback cb, void *arg);
-void sp_reactor_detach(void *ev);
-void sp_reactor_run(void *h, int flag);
+typedef void *(*sp_thread_callback) (void *);
+
+void *sp_thread_new(sp_thread_callback cb, void *arg);
+void sp_thread_free(void *h);
+
+void *sp_tls_new();
+void sp_tls_set(void *h, void *ptr);
+void *sp_tls_get(void *h);
+void sp_tls_free(void *h);
 
 #ifdef __cplusplus
 }
 #endif
-   
-#endif 
+
+#endif
