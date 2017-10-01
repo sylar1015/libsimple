@@ -109,4 +109,3 @@ inline uint16_t sp_ntohs(uint16_t netshort)
 {
     return ntohs(netshort);
 }
-

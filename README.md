@@ -7,6 +7,10 @@ wrapper for common functions, such as memory, string, regex, etc ...
 
 wrapper for 3rd party functions, such as reactor, xml, etc ...
 
+reactor is based on libevent, to use reactor api, you need to install libevent yourself;
+
+Or "make libevent" before "make" to make libevent locally;
+
 To Be Continued ...
 
 Linux下常用的C函数;
