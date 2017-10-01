@@ -29,6 +29,7 @@
 #include <inttypes.h>
 
 #include "sp_util.h"
+#include "sp_socket.h"
 #include "sp_string.h"
 #include "sp_macros.h"
 #include "sp_memory.h"

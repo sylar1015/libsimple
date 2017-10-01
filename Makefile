@@ -4,6 +4,8 @@ SOURCE:=${wildcard source/*.c}
 
 CFLAGS:= #-fpermissive
 
+LDFLAGS:=-L/usr/local/lib/ -levent
+
 all:
 	make clean
 	make obj;make shared
@@ -11,7 +13,7 @@ all:
 
 obj:
 	mkdir -p obj
-	gcc -c -fPIC ${INCLUDE} ${CFLAGS} ${SOURCE}
+	gcc -c -fPIC ${INCLUDE} ${CFLAGS} ${SOURCE} ${LDFLAGS}
 	mv *.o obj/
 
 shared:
@@ -19,12 +21,15 @@ shared:
 	mkdir -p lib
 	gcc --shared obj/*.o -o lib/libsp.so
 
+libevent:
+	cd 3party/libevent && ./configure && make && make install
+
 all:
 	make test
 	make shared
 
 test:
-	gcc ${INCLUDE} ${SOURCE} ${CFLAGS} tests/test.c -o tests/a.out
+	gcc ${INCLUDE} ${SOURCE} ${CFLAGS} ${LDFLAGS} tests/test.c -o tests/a.out
 
 clean:
 	rm -rf obj
