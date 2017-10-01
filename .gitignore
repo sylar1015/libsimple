@@ -1,7 +1,54 @@
 # Source Insight
 libsimple.*
 
+#compile files
 tests/a.out
+3party/libevent/.deps/
+3party/libevent/.libs/
+3party/libevent/Makefile
+3party/libevent/config.h
+3party/libevent/config.log
+3party/libevent/config.status
+3party/libevent/include/event2/event-config.h
+3party/libevent/libevent.pc
+3party/libevent/libevent_core.pc
+3party/libevent/libevent_extra.pc
+3party/libevent/libevent_openssl.pc
+3party/libevent/libevent_pthreads.pc
+3party/libevent/libtool
+3party/libevent/sample/.deps/
+3party/libevent/sample/.dirstamp
+3party/libevent/sample/.libs/
+3party/libevent/sample/dns-example
+3party/libevent/sample/event-read-fifo
+3party/libevent/sample/hello-world
+3party/libevent/sample/http-connect
+3party/libevent/sample/http-server
+3party/libevent/sample/https-client
+3party/libevent/sample/le-proxy
+3party/libevent/sample/signal-test
+3party/libevent/sample/time-test
+3party/libevent/stamp-h1
+3party/libevent/stamp-h2
+3party/libevent/test/.deps/
+3party/libevent/test/.dirstamp
+3party/libevent/test/.libs/
+3party/libevent/test/bench
+3party/libevent/test/bench_cascade
+3party/libevent/test/bench_http
+3party/libevent/test/bench_httpclient
+3party/libevent/test/regress
+3party/libevent/test/rpcgen-attempted
+3party/libevent/test/test-changelist
+3party/libevent/test/test-closed
+3party/libevent/test/test-dumpevents
+3party/libevent/test/test-eof
+3party/libevent/test/test-fdleak
+3party/libevent/test/test-init
+3party/libevent/test/test-ratelim
+3party/libevent/test/test-time
+3party/libevent/test/test-weof
+
 # Prerequisites
 *.d
 
