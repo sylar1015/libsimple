@@ -17,6 +17,10 @@
 
 #include "sp.h"
 
+#include <regex.h>
+#include <stdarg.h>
+#include <sys/time.h>
+
 inline uint32_t sp_log2(uint32_t x)
 {
 #if defined(__i386) || defined(__86__64__)
@@ -49,3 +53,36 @@ inline void sp_copy(void *dst, const void *src, size_t size)
 {
     memcpy(dst, src, size);
 }
+
+int sp_regex(const char *pattern, const char *text, ...)
+{
+    const int count = 10;
+    regmatch_t sz_match[count];
+    regex_t reg;
+    int ret = regcomp (&reg, pattern, REG_EXTENDED);
+    sp_return_val_if_fail(ret == 0, -1);
+    
+    ret = regexec(&reg, text, count, sz_match, 0);
+    if (ret != 0)
+    {
+        regfree(&reg);
+        return -1;
+    }
+    
+    va_list args;
+    va_start(args, pattern);
+    int i;
+    for (i = 1; i < count && sz_match[i].rm_so != -1; i++)
+    {
+        char * buffer = va_arg(args, char *);
+        int length = sz_match[i].rm_eo - sz_match[i].rm_so;
+        sp_copy(buffer, text + sz_match[i].rm_so, length);
+        buffer[length] = 0;
+    }
+    va_end(args);
+
+    regfree(&reg);
+
+    return 0;
+}
+

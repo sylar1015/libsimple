@@ -32,6 +32,8 @@ uint32_t sp_roundup4(uint32_t x);
 void sp_bzero(void *ptr, size_t size);
 void sp_copy(void *dst, const void *src, size_t size);
 
+int sp_regex(const char *pattern, const char *text, ...);
+
 #ifdef __cplusplus
 }
 #endif

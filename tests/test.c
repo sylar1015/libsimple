@@ -7,6 +7,7 @@ typedef struct
 } test_case_t;
 
 static int test_xml();
+static int test_regex();
 static int test_string();
 static int test_socket();
 static int test_service();
@@ -15,6 +16,7 @@ static int test_service();
 static test_case_t test_cases[] = {
 
     {"test_xml", test_xml},
+    {"test_regex", test_regex},
     {"test_string", test_string},
     {"test_socket", test_socket},
     {"test_service", test_service},
@@ -63,6 +65,23 @@ static int test_xml()
 
     return 0;
 }
+
+static int test_regex()
+{
+    const char *pattern = "age ([0-9]+).*?(\\(\\+86\\)[0-9]+)";
+    const char *text = "I am sylar, age 18, my phone number is (+86)1314520.";
+
+    char age[32];
+    char phone[32];
+    sp_return_val_if_fail(sp_regex(pattern, text, age, phone) == 0, -1);
+
+    sp_return_val_if_fail(sp_string_equal(age, "18"), -1);
+
+    sp_return_val_if_fail(sp_string_equal(phone, "(+86)1314520"), -1);
+
+    return 0;
+}
+
 
 static int test_socket()
 {
