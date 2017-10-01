@@ -23,6 +23,8 @@ shared:
 	gcc --shared obj/*.o -o lib/libsp.so
 
 libevent:
+	cd 3party/ && tar zxvf libevent-2.1.8-stable.tar.gz && mv libevent-2.1.8-stable libevent
+	cd 3party/ && rm -rf libevent-2.1.8-stable.tar.gz
 	cd 3party/libevent && ./configure && make && make install
 
 all:
