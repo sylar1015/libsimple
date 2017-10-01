@@ -1,10 +1,11 @@
-INCLUDE:=-Iinclude
+INCLUDE:=-Iinclude \
+		-I/usr/include/libxml2
 
 SOURCE:=${wildcard source/*.c}
 
 CFLAGS:= #-fpermissive
 
-LDFLAGS:=-L/usr/local/lib/ -levent
+LDFLAGS:=-L/usr/local/lib/ -levent -lxml2
 
 all:
 	make clean

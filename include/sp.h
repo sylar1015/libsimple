@@ -28,6 +28,7 @@
 #include <stdbool.h>
 #include <inttypes.h>
 
+#include "sp_xml.h"
 #include "sp_util.h"
 #include "sp_socket.h"
 #include "sp_string.h"

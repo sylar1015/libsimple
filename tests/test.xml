@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+    <user id="1"> 
+		<name>Hello</name>
+		<age>17</age>
+		<sex>Unknown</sex>
+    </user>
+	<user id="2">
+		<name>LibSimple</name>
+		<age>8</age>
+		<sex>Guess</sex>
+	</user>
+</root>

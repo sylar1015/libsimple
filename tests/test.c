@@ -41,48 +41,26 @@ int main()
 
 static int test_xml()
 {
-#if 0
-    void *h = sp_xml_parse_file("./HttpConf.xml");
+
+    void *h = sp_xml_parse_file("./test.xml");
     sp_return_val_if_fail(h, -1);
 
-    xpath_result_t result;
-    if (sp_xml_xpath(h, "//NetworkID", &result) < 0)
+    sp_xpath_result_t result;
+    if (sp_xml_xpath(h, "//user", &result) < 0)
         return -1;
 
-    void *node = result.nodes[0];
-    printf("%s\n", sp_xml_get_text(node));
+    sp_return_val_if_fail(result.n_nodes == 2, -1);
 
-
-    if (sp_xml_xpath(h, "//SniffPort", &result) < 0)
+    if (sp_xml_xpath(h, "//user[@id=\"1\"]", &result) < 0)
         return -1;
 
-    node = result.nodes[0];
-    printf("%s\n", sp_xml_get_text(node));
+    void *node = sp_xml_get_child(result.nodes[0], "name");
+    sp_return_val_if_fail(node, -1);
 
+    sp_return_val_if_fail(sp_string_equal("Hello", sp_xml_get_text(node)), -1);
+    
     sp_xml_free(h);
 
-    h = sp_xml_parse_file("./HttpRedirectConf.xml");
-
-    if (sp_xml_xpath(h, "//RedirectRule", &result) < 0)
-        return -1;
-
-    int i;
-    for (i = 0; i < result.n_nodes; i++)
-    {
-        node = result.nodes[i];
-        printf("prop: %s\n", sp_xml_get_prop(node, "ID"));
-
-        void *type = sp_xml_get_child(node, "RedirectType");
-        void *src = sp_xml_get_child(node, "RedirectUrlSrc");
-        void *dst = sp_xml_get_child(node, "RedirectUrlDes");
-        printf("text: %s %s %s\n",
-            sp_xml_get_text(type),
-            sp_xml_get_text(src),
-            sp_xml_get_text(dst));
-    }
-
-    sp_xml_free(h);
-#endif
     return 0;
 }
 
