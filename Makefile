@@ -13,14 +13,14 @@ all:
 	make clean
 
 obj:
-	mkdir -p obj
+	mkdir -p objs
 	gcc -c -fPIC ${INCLUDE} ${CFLAGS} ${SOURCE} ${LDFLAGS}
-	mv *.o obj/
+	mv *.o objs/
 
 shared:
 	make obj
 	mkdir -p lib
-	gcc --shared obj/*.o -o lib/libsp.so
+	gcc --shared objs/*.o -o lib/libsp.so
 
 libevent:
 	cd 3party/ && tar zxvf libevent-2.1.8-stable.tar.gz && mv libevent-2.1.8-stable libevent
@@ -35,5 +35,5 @@ test:
 	gcc ${INCLUDE} ${SOURCE} ${CFLAGS} ${LDFLAGS} tests/test.c -o tests/a.out
 
 clean:
-	rm -rf obj
+	rm -rf objs
 	rm -rf *.o
