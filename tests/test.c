@@ -7,6 +7,7 @@ typedef struct
 } test_case_t;
 
 static int test_xml();
+static int test_log();
 static int test_regex();
 static int test_string();
 static int test_socket();
@@ -16,6 +17,7 @@ static int test_service();
 static test_case_t test_cases[] = {
 
     {"test_xml", test_xml},
+    {"test_log", test_log},
     {"test_regex", test_regex},
     {"test_string", test_string},
     {"test_socket", test_socket},
@@ -38,6 +40,20 @@ int main()
             printf("%s success\n", ts->name);
         }
     }
+    return 0;
+}
+
+static int test_log()
+{
+    void *h = sp_log_new("./test.conf", "test");
+    sp_return_val_if_fail(h, -1);
+
+    sp_log_error(h, "error log should be in log");
+    sp_log_info(h, "info log should be in log");
+    sp_log_debug(h, "debug log should not be in log");
+
+    sp_free(h);
+
     return 0;
 }
 

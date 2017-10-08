@@ -7,7 +7,7 @@ SOURCE:=${wildcard source/*.c}
 
 CFLAGS:= #-fpermissive
 
-LDFLAGS:=-L/usr/local/lib/ -levent -lxml2 -lzlog
+LDFLAGS:=-L/usr/local/lib/ -levent -lxml2 -lzlog -lpthread
 
 all:
 	make clean
