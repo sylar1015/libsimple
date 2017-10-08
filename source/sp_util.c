@@ -70,7 +70,7 @@ int sp_regex(const char *pattern, const char *text, ...)
     }
     
     va_list args;
-    va_start(args, pattern);
+    va_start(args, text);
     int i;
     for (i = 1; i < count && sz_match[i].rm_so != -1; i++)
     {
