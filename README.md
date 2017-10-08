@@ -11,6 +11,10 @@ reactor is based on libevent, to use reactor api, you need to install libevent y
 
 Or "make libevent" before "make" to make libevent locally;
 
+log is based on zlog, you need to install zlog yourself;
+
+Or "make zlog" before "make" to make zlog locally;
+
 xml is based on libxml2/xpath, use use xml api, you need to install libxml2 yourself;
 
 To Be Continued ...

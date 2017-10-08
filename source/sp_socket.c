@@ -80,7 +80,8 @@ inline int sp_socket_readable(int sock)
 
 int sp_socket_originaldst(int sock, struct sockaddr *addr)
 {
-    return getsockopt(sock, SOL_IP, SO_ORIGINAL_DST, addr, sizeof(struct sockaddr_in));
+    int opt_len = sizeof(struct sockaddr_in);
+    return getsockopt(sock, SOL_IP, SO_ORIGINAL_DST, addr, &opt_len);
 }
 
 int sp_socket_tcpinfo(int sock, struct tcp_info *ti)
