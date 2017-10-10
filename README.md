@@ -15,7 +15,9 @@ log is based on zlog, you need to install zlog yourself;
 
 Or "make zlog" before "make" to make zlog locally;
 
-xml is based on libxml2/xpath, use use xml api, you need to install libxml2 yourself;
+xml is based on libxml2/xpath, to use xml api, you need to install libxml2 yourself;
+
+task is based on tipc, to use task api, you need to install tipc yourself
 
 To Be Continued ...
 

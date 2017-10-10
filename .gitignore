@@ -3,6 +3,7 @@ libsimple.*
 
 #compile files
 tests/a.out
+tests/test.log
 3party/libevent/.deps/
 3party/libevent/.libs/
 3party/libevent/Makefile
