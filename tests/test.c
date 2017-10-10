@@ -8,6 +8,7 @@ typedef struct
 
 static int test_xml();
 static int test_log();
+static int test_task();
 static int test_regex();
 static int test_string();
 static int test_socket();
@@ -18,6 +19,7 @@ static test_case_t test_cases[] = {
 
     {"test_xml", test_xml},
     {"test_log", test_log},
+    {"test_task", test_task},
     {"test_regex", test_regex},
     {"test_string", test_string},
     {"test_socket", test_socket},
@@ -40,6 +42,39 @@ int main()
             printf("%s success\n", ts->name);
         }
     }
+    return 0;
+}
+
+static void task1_cb(int msg, void *data, int length, void *arg)
+{
+    printf("task_cb1: %d %s %d\n", msg, data, length);
+}
+
+static void task2_cb(int msg, void *data, int length, void *arg)
+{
+    printf("task_cb2: %d %s %d\n", msg, data, length);
+}
+
+static int test_task()
+{
+    void *task1 = sp_task_new("task1", 0x80000000, 1, task1_cb);
+    sp_return_val_if_fail(task1, -1);
+
+    void *task2 = sp_task_new("task2", 0x80000001, 1, task2_cb);
+    sp_return_val_if_fail(task2, -1);
+
+    sp_task_addr_t task_addr;
+    sp_bzero(&task_addr, sizeof(task_addr));
+    task_addr.type = 0x80000000;
+    task_addr.instance = 1;
+    int ret = sp_task_sendto_anywhere(100, "hello", 6, &task_addr);
+    sp_return_val_if_fail(ret == 0, -1);
+
+    usleep(1000);
+
+    sp_task_free(task2);
+    sp_task_free(task1);
+
     return 0;
 }
 

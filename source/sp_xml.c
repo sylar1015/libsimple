@@ -79,7 +79,7 @@ int sp_xml_xpath(void *handle, const char *xpath, sp_xpath_result_t *result)
 
     xmlNodeSetPtr nodeset = h->result->nodesetval;
     result->n_nodes = nodeset->nodeNr;
-    result->nodes = nodeset->nodeTab;
+    result->nodes = (void **)nodeset->nodeTab;
 
     return 0;
 }

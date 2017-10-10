@@ -15,7 +15,9 @@ log is based on zlog, you need to install zlog yourself;
 
 Or "make zlog" before "make" to make zlog locally;
 
-xml is based on libxml2/xpath, use use xml api, you need to install libxml2 yourself;
+xml is based on libxml2/xpath, to use xml api, you need to install libxml2 yourself;
+
+task is based on tipc, to use task api, you need to install tipc yourself
 
 To Be Continued ...
 
@@ -25,8 +27,11 @@ Linux下常用的C函数;
 
 因为一些商用模块不能提供代码,这里重写了一部分;
 
-Linux下常用C函数的简单封装, Memory/String等;;
+组件包括, Reactor/XML/String/Memory/Log/Task 等;
 
-常用第三方库的封装, Reactor/XML等;
+Reactor 依赖 libevent
+XML/XPATH 依赖 libxml2
+Log 依赖 zlog
+Task 依赖 tipc
 
 持续添加中 ...
