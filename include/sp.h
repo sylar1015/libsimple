@@ -31,6 +31,7 @@
 #include "sp_log.h"
 #include "sp_xml.h"
 #include "sp_util.h"
+#include "sp_list.h"
 #include "sp_task.h"
 #include "sp_socket.h"
 #include "sp_string.h"

@@ -13,6 +13,7 @@ static int test_regex();
 static int test_string();
 static int test_socket();
 static int test_service();
+static int test_list();
 
 
 static test_case_t test_cases[] = {
@@ -24,6 +25,7 @@ static test_case_t test_cases[] = {
     {"test_string", test_string},
     {"test_socket", test_socket},
     {"test_service", test_service},
+    {"test_list", test_list},
 };
 
 int main()
@@ -202,5 +204,34 @@ static int test_string()
 
     sp_return_val_if_fail(sp_string_endswith(str, "!"), -1);
 
+    return 0;
+}
+
+static int test_list()
+{
+    void *list = sp_list_new(NULL);
+
+    int size = sp_list_size(list);
+    sp_return_val_if_fail(size == 0, -1);
+
+    sp_list_push_back(list, 1);
+    size = sp_list_size(list);
+    sp_return_val_if_fail(size == 1, -1);
+
+    sp_list_push_back(list, 2);
+    size = sp_list_size(list);
+    sp_return_val_if_fail(size == 2, -1);
+
+    int val = sp_list_front(list);
+    sp_return_val_if_fail(val == 1, -1);
+
+    val = sp_list_back(list);
+    sp_return_val_if_fail(val == 2, -1);
+
+    sp_list_clear(list);
+    size = sp_list_size(list);
+    sp_return_val_if_fail(size == 0, -1);
+
+    sp_list_free(list);
     return 0;
 }
