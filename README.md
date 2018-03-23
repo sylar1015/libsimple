@@ -19,6 +19,8 @@ xml is based on libxml2/xpath, to use xml api, you need to install libxml2 yours
 
 task is based on tipc, to use task api, you need to install tipc yourself
 
+http is based on curl, to use http api, you need to install curl yourself
+
 To Be Continued ...
 
 Linux下常用的C函数;
@@ -33,5 +35,5 @@ Reactor 依赖 libevent
 XML/XPATH 依赖 libxml2
 Log 依赖 zlog
 Task 依赖 tipc
-
+Http 依赖 curl
 持续添加中 ...
