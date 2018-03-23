@@ -27,6 +27,7 @@ extern "C"
 
 size_t sp_string_length(const char *str);
 void sp_string_copy(char *dst, const char *src);
+void sp_string_ncopy(char *dst, const char *src, int n);
 void sp_string_clear(char *str);
 bool sp_string_empty(const char *str);
 bool sp_string_equal(const char *str1, const char *str2);
@@ -34,6 +35,20 @@ bool sp_string_startswith(const char *str, const char*sub);
 bool sp_string_endswith(const char *str, const char *sub);
 int sp_string_find(const char *str, const char *sub);
 void sp_string_append(char *buffer, const char *format, ...);
+void sp_string_trim_left(const char *buffer, char *trim_buffer);
+void sp_string_trim_right(const char *buffer, char *trim_buffer);
+void sp_string_trim(const char *buffer, char *trim_buffer);
+void sp_string_trim_inplace(char *buffer);
+void sp_string_trim_left_inplace(char *buffer);
+void sp_string_trim_right_inplace(char *buffer);
+
+
+void *sp_string_buffer_new(int size);
+void sp_string_buffer_append(void *buffer, const char *string, int size);
+void sp_string_buffer_free(void *buffer);
+int sp_string_buffer_capacity(void *buffer);
+int sp_string_buffer_size(void *buffer);
+char *sp_string_buffer_string(void *buffer);
 
 #ifdef __cplusplus
 }

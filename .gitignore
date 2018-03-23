@@ -1,6 +1,11 @@
 # Source Insight
 libsimple.*
 
+#3party
+3party/cJSON/
+3party/libevent/
+3party/zlog/
+
 #compile files
 tests/a.out
 tests/test.log

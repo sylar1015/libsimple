@@ -25,6 +25,7 @@ extern "C"
 {
 #endif
 
+typedef void *(*sp_malloc_func_t)(size_t size);
 typedef void (*sp_free_func_t)(void *ptr);
 
 void *sp_malloc(size_t size) __malloc__;

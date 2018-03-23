@@ -19,6 +19,14 @@
 
 #include <stdarg.h>
 
+typedef struct
+{
+    char *buffer;
+
+    int size;
+    int capacity;
+} sp_string_buffer_t;
+
 inline size_t sp_string_length(const char *str)
 {
     return strlen(str); 
@@ -27,6 +35,11 @@ inline size_t sp_string_length(const char *str)
 inline void sp_string_copy(char *dst, const char *src)
 {
     strcpy(dst, src);
+}
+
+void sp_string_ncopy(char *dst, const char *src, int n)
+{
+    strncpy(dst, src, n);
 }
 
 inline void sp_string_clear(char *str)
@@ -69,4 +82,175 @@ void sp_string_append(char *buffer, const char *format, ...)
     vsprintf(buffer + sp_string_length(buffer), format, args);
 
     va_end(args);
+}
+
+void sp_string_trim(const char *buffer, char *trim_buffer)
+{
+    sp_return_if_fail(buffer && trim_buffer);
+
+    sp_string_trim_left(buffer, trim_buffer);
+    sp_string_trim_right_inplace(trim_buffer);
+}
+
+void sp_string_trim_left(const char *buffer, char *trim_buffer)
+{
+    sp_return_if_fail(buffer && trim_buffer);
+
+    const char *p = buffer;
+
+    while(*p == ' '
+        || *p == '\r'
+        || *p == '\n'
+        || *p == '\t')
+    {
+        p++;
+    }
+
+    sp_string_copy(trim_buffer, p);
+}
+
+void sp_string_trim_right(const char *buffer, char *trim_buffer)
+{
+    sp_return_if_fail(buffer && trim_buffer);
+
+    const char *p = buffer + sp_string_length(buffer);
+    p--;
+
+    while(*p == ' '
+        || *p == '\r'
+        || *p == '\n'
+        || *p == '\t')
+    {
+        p--;
+    }
+
+    int n = p - buffer + 1;
+    sp_string_ncopy(trim_buffer, buffer, n);
+    trim_buffer[n] = 0;
+}
+
+void sp_string_trim_inplace(char *buffer)
+{
+    sp_return_if_fail(buffer);
+
+    sp_string_trim_left_inplace(buffer);
+    sp_string_trim_right_inplace(buffer);
+}
+
+void sp_string_trim_left_inplace(char *buffer)
+{
+    sp_return_if_fail(buffer);
+
+    const char *p = buffer;
+    int n = sp_string_length(buffer);
+
+    while(*p == ' '
+        || *p == '\r'
+        || *p == '\n'
+        || *p == '\t')
+    {
+        p++;
+        n--;
+    }
+
+    memmove(buffer, p, n);
+}
+
+void sp_string_trim_right_inplace(char *buffer)
+{
+    sp_return_if_fail(buffer);
+
+    char *p = buffer + sp_string_length(buffer);
+    p--;
+
+    while(*p == ' '
+        || *p == '\r'
+        || *p == '\n'
+        || *p == '\t')
+    {
+        *p = 0;
+        p--;
+    }
+}
+
+void *sp_string_buffer_new(int size)
+{
+    sp_string_buffer_t *buffer = sp_calloc(1, sizeof(sp_string_buffer_t));
+
+    if (size <= 0)
+    {
+        size = 4096;
+    }
+
+    buffer->buffer = sp_malloc(size);
+    buffer->size = 0;
+    buffer->capacity = size;
+    sp_string_clear(buffer->buffer);
+
+    return buffer;
+}
+
+void sp_string_buffer_append(void *buffer, const char *string, int size)
+{
+    sp_return_if_fail(buffer && string);
+
+    sp_string_buffer_t *buf = (sp_string_buffer_t *)buffer;
+
+    if (size <= 0)
+    {
+        size = sp_string_length(string);
+    }
+
+    int expect_size = size + buf->size;
+    if (expect_size >= (buf->capacity >> 1))
+    {
+        int expect_capacity = (expect_size << 1);
+        buf->buffer = sp_realloc(buf->buffer, expect_capacity);
+        buf->capacity = expect_capacity;
+        buf->buffer[size] = 0;
+    }
+
+    buf->size += size;
+    sp_string_append(buf->buffer, "%s", string);
+}
+
+void sp_string_buffer_free(void *buffer)
+{
+    sp_return_if_fail(buffer);
+
+    sp_string_buffer_t *buf = (sp_string_buffer_t *)buffer;
+
+    if (buf->buffer)
+    {
+        sp_free(buf->buffer);
+    }
+
+    sp_free(buf);
+}
+
+int sp_string_buffer_capacity(void *buffer)
+{
+    sp_return_val_if_fail(buffer, 0);
+
+    sp_string_buffer_t *buf = (sp_string_buffer_t *)buffer;
+
+    return buf->capacity;
+}
+
+int sp_string_buffer_size(void *buffer)
+{
+    sp_return_val_if_fail(buffer, 0);
+
+    sp_string_buffer_t *buf = (sp_string_buffer_t *)buffer;
+
+    return buf->size;
+}
+
+char *sp_string_buffer_string(void *buffer)
+{
+    sp_return_val_if_fail(buffer, NULL);
+
+    sp_string_buffer_t *buf = (sp_string_buffer_t *)buffer;
+
+    return buf->buffer;
 }

@@ -69,6 +69,11 @@ extern "C"
         return (val); \
     }
 
+#define sp_break_if_fail(expr) \
+    if likely(expr) {} else { \
+        break; \
+    }
+
 #ifdef __cplusplus
 }
 #endif

@@ -14,6 +14,8 @@ static int test_string();
 static int test_socket();
 static int test_service();
 static int test_list();
+static int test_string_buffer();
+static int test_http();
 
 
 static test_case_t test_cases[] = {
@@ -26,6 +28,8 @@ static test_case_t test_cases[] = {
     {"test_socket", test_socket},
     {"test_service", test_service},
     {"test_list", test_list},
+    {"test_string_buffer", test_string_buffer},
+    {"test_http", test_http},
 };
 
 int main()
@@ -59,6 +63,7 @@ static void task2_cb(int msg, void *data, int length, void *arg)
 
 static int test_task()
 {
+#if 0
     void *task1 = sp_task_new("task1", 0x80000000, 1, task1_cb);
     sp_return_val_if_fail(task1, -1);
 
@@ -77,6 +82,7 @@ static int test_task()
     sp_task_free(task2);
     sp_task_free(task1);
 
+#endif
     return 0;
 }
 
@@ -204,6 +210,18 @@ static int test_string()
 
     sp_return_val_if_fail(sp_string_endswith(str, "!"), -1);
 
+    str = "  hello\r\n";
+    char buffer[64];
+
+    sp_string_trim_left(str, buffer);
+    sp_return_val_if_fail(sp_string_equal(buffer, "hello\r\n"), -1);
+
+    sp_string_trim_right(str, buffer);
+    sp_return_val_if_fail(sp_string_equal(buffer, "  hello"), -1);
+
+    sp_string_trim(str, buffer);
+    sp_return_val_if_fail(sp_string_equal(buffer, "hello"), -1);
+
     return 0;
 }
 
@@ -233,5 +251,41 @@ static int test_list()
     sp_return_val_if_fail(size == 0, -1);
 
     sp_list_free(list);
+    return 0;
+}
+
+static int test_string_buffer()
+{
+    void *buffer = sp_string_buffer_new(0);
+
+    const char *str = "hello world";
+    sp_string_buffer_append(buffer, str, -1);
+
+    sp_return_val_if_fail(sp_string_buffer_size(buffer) == sp_string_length(str), -1);
+
+    char buf[4096];
+    memset(buf, 'A', 4096);
+    buf[4095] = 0;
+
+    sp_string_buffer_append(buffer, buf, -1);
+    sp_return_val_if_fail(sp_string_buffer_size(buffer) == (4095 + sp_string_length(str)), -1);
+
+    sp_string_buffer_free(buffer);
+
+    return 0;
+}
+
+static int test_http()
+{
+    const char *url = "http://www.baidu.com";
+
+    sp_http_response_t *res = sp_http_get(url, NULL, 1);
+
+    sp_return_val_if_fail(res, -1);
+    printf("headers:%s\n", sp_string_buffer_string(res->raw_headers));
+    printf("body:%s\n", sp_string_buffer_string(res->raw_body));
+    printf("status_code:%d\n", res->status_code);
+
+    sp_return_val_if_fail(res->status_code == 200, -1);
     return 0;
 }
