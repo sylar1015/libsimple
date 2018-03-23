@@ -34,16 +34,38 @@ typedef struct
 typedef struct
 {
     int status_code;
+
     sp_http_headers_t headers;
 
     void *raw_headers;
     void *raw_body;
 } sp_http_response_t;
 
-typedef struct
-{
-    
-} sp_http_session_t;
+sp_http_response_t *sp_http_get(const char *url, sp_http_headers_t *headers, int timeout);
+
+sp_http_response_t *sp_http_post(const char *url,
+    sp_http_headers_t *headers,
+    const char *payload, int length, int timeout);
+
+void *sp_http_session_new();
+
+void sp_http_session_free(void *session);
+
+int sp_http_session_timeout(void *session);
+
+void sp_http_session_set_timeout(void *session, int timeout);
+
+sp_http_headers_t *sp_http_session_headers(void *session);
+
+void sp_http_session_set_headers(void *session, sp_http_headers_t *headers);
+
+sp_http_response_t *sp_http_session_get(void *session, const char *url);
+
+sp_http_response_t *sp_http_session_post(void *session, const char *url, const char *payload, int length);
+
+
+sp_http_response_t *sp_http_response_new();
+void sp_http_response_free(sp_http_response_t *res);
 
 void sp_http_headers_set(sp_http_headers_t *headers, const char *key, const char *val);
 
@@ -53,12 +75,6 @@ void sp_http_headers_init(sp_http_headers_t *headers);
 
 void sp_http_headers_fini(sp_http_headers_t *headers);
 
-sp_http_response_t *sp_http_get(const char *url, sp_http_headers_t *headers, int timeout);
-
-sp_http_response_t *sp_http_post(const char *url, sp_http_headers_t *headers, int timeout);
-
-sp_http_response_t *sp_http_response_new();
-void sp_http_response_free(sp_http_response_t *res);
 
 #ifdef __cplusplus
 }
