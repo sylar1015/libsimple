@@ -282,10 +282,43 @@ static int test_http()
     sp_http_response_t *res = sp_http_get(url, NULL, 1);
 
     sp_return_val_if_fail(res, -1);
-    printf("headers:%s\n", sp_string_buffer_string(res->raw_headers));
-    printf("body:%s\n", sp_string_buffer_string(res->raw_body));
-    printf("status_code:%d\n", res->status_code);
+    //printf("headers:%s\n", sp_string_buffer_string(res->raw_headers));
+    //printf("body:%s\n", sp_string_buffer_string(res->raw_body));
+    //printf("status_code:%d\n", res->status_code);
 
     sp_return_val_if_fail(res->status_code == 200, -1);
+
+    sp_http_response_free(res);
+
+    url = "http://hlht.zc3u.com/evcs/20160701/query_token";
+
+    sp_json_t *headers = sp_json_object_new();
+    sp_json_object_add(headers, "Content-Type", sp_json_string("application/json"));
+    sp_json_object_add(headers, "User-Agent", sp_json_string("libcurl client"));
+
+    sp_json_t *payload = sp_json_object_new();
+
+    sp_json_object_add(payload, "LastQueryTime", sp_json_string(""));
+    sp_json_object_add(payload, "PageCount", sp_json_int(1));
+    sp_json_object_add(payload, "PageNo", sp_json_int(1));
+
+    const char *text = sp_json_text(payload);
+    
+    res = sp_http_post(url, headers, 1, text, sp_string_length(text));
+    sp_return_val_if_fail(res, -1);
+
+    sp_free(text);
+
+    sp_json_free(headers);
+    sp_json_free(payload);
+
+    //printf("json: %s\n", sp_string_buffer_string(res->raw_body));
+    sp_http_response_free(res);
+
+    //domain is unreachable
+    url = "http://www.sylar.com.cn";
+    res = sp_http_get(url, NULL, 1);
+    sp_return_val_if_fail(!res, -1);
+
     return 0;
 }

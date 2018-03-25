@@ -21,90 +21,54 @@
 typedef struct
 {
     CURL *curl;
-    int timeout;
-
-    sp_http_headers_t headers;
 } sp_http_session_t;
 
-static struct curl_slist *sp_headers_2_curl_headers(sp_http_headers_t *headers);
+static struct curl_slist *sp_headers_2_curl_headers(sp_json_t *headers);
 static size_t sp_http_write_callback(void *data, size_t size, size_t nmemb, void *arg);
 static size_t sp_http_header_callback(void *data, size_t size, size_t nmemb, void *arg);
-static sp_http_response_t *sp_http_session_perform(sp_http_session_t *session, const char *url);
+static sp_http_response_t *sp_http_session_perform(sp_http_session_t *session,
+    const char *url, sp_json_t *headers, int timeout);
+static sp_http_response_t *sp_http_response_new();
 
-void sp_http_headers_set(sp_http_headers_t *headers, const char *key, const char *val)
-{
-    sp_return_if_fail(headers && key && val);
-
-    if (!headers->headers)
-    {
-        headers->headers = sp_json_object_new();
-    }
-
-    sp_json_object_add(headers->headers, key, sp_json_string(val));
-}
-
-char *sp_http_headers_get(sp_http_headers_t *headers, const char *key)
-{
-    sp_return_val_if_fail(headers && key && headers->headers, NULL);
-
-    sp_json_t *item = sp_json_object_item_i(headers->headers, key);
-
-    sp_return_val_if_fail(item, NULL);
-
-    return item->valuestring;
-}
-
-void sp_http_headers_init(sp_http_headers_t *headers)
-{
-    sp_return_if_fail(headers);
-
-    headers->headers = NULL;
-}
-
-void sp_http_headers_fini(sp_http_headers_t *headers)
-{
-    sp_return_if_fail(headers);
-
-    if (headers->headers)
-    {
-        sp_json_free(headers->headers);
-        headers->headers = NULL;
-    }
-}
-
-sp_http_response_t *sp_http_get(const char *url, sp_http_headers_t *headers, int timeout)
+sp_http_response_t *sp_http_get(const char *url, sp_json_t *headers, int timeout)
 {
     sp_return_val_if_fail(url, NULL);
 
     sp_http_session_t *session = sp_http_session_new();
     sp_return_val_if_fail(session, NULL);
 
-    sp_http_session_set_headers(session, headers);
-    
-    sp_http_session_set_timeout(session, timeout);
-    sp_http_response_t *res = sp_http_session_get(session, url);
+    sp_http_response_t *res = sp_http_session_get(session, url, headers, timeout);
 
-    session->headers.headers = NULL;
     sp_http_session_free(session);
     
     return res;
 }
 
-sp_http_response_t *sp_http_post(const char *url, sp_http_headers_t *headers,
-    const char *payload, int length, int timeout)
+sp_http_response_t *sp_http_post(const char *url, sp_json_t *headers,
+    int timeout, const char *payload, int length)
 {
     sp_return_val_if_fail(url, NULL);
 
     sp_http_session_t *session = sp_http_session_new();
     sp_return_val_if_fail(session, NULL);
 
-    sp_http_session_set_headers(session, headers);
-    
-    sp_http_session_set_timeout(session, timeout);
-    sp_http_response_t *res = sp_http_session_post(session, url, payload, length);
+    sp_http_response_t *res = sp_http_session_post(session, url, headers, timeout, payload, length);
 
-    session->headers.headers = NULL;
     sp_http_session_free(session);
+
+    return res;
+}
+
+sp_http_response_t *sp_http_post_json(const char *url,
+    sp_json_t *headers, int timeout, sp_json_t *json)
+{
+    sp_return_val_if_fail(url && json, NULL);
+    const char *text = sp_json_text(json);
+
+    int length = sp_string_length(text);
+    sp_http_response_t *res = sp_http_post(url, headers, timeout, text, length);
+
+    sp_free(text);
 
     return res;
 }
@@ -114,7 +78,6 @@ void *sp_http_session_new()
     sp_http_session_t *session = sp_calloc(1, sizeof(sp_http_session_t));
 
     session->curl = curl_easy_init();
-    sp_http_headers_init(&session->headers);
 
     return session;
 }
@@ -127,47 +90,11 @@ void sp_http_session_free(void *session)
 
     curl_easy_cleanup(s->curl);
 
-    sp_http_headers_fini(&s->headers);
-
     sp_free(session);
 }
 
-int sp_http_session_timeout(void *session)
-{
-    sp_return_if_fail(session);
-
-    sp_http_session_t *s = (sp_http_session_t *)session;
-    return s->timeout;
-}
-
-void sp_http_session_set_timeout(void *session, int timeout)
-{
-    sp_return_if_fail(session);
-
-    sp_http_session_t *s = (sp_http_session_t *)session;
-
-    s->timeout = timeout;
-}
-
-sp_http_headers_t *sp_http_session_headers(void *session)
-{
-    sp_return_if_fail(session);
-
-    sp_http_session_t *s = (sp_http_session_t *)session;
-
-    return &s->headers;
-}
-
-void sp_http_session_set_headers(void *session, sp_http_headers_t *headers)
-{
-    sp_return_if_fail(session && headers);
-    
-    sp_http_session_t *s = (sp_http_session_t *)session;
-
-    s->headers.headers = headers->headers;
-}
-
-static sp_http_response_t *sp_http_session_perform(sp_http_session_t *session, const char *url)
+static sp_http_response_t *sp_http_session_perform(sp_http_session_t *session,
+    const char *url, sp_json_t *headers, int timeout)
 {
     sp_return_val_if_fail(session && url, NULL);
 
@@ -179,16 +106,16 @@ static sp_http_response_t *sp_http_session_perform(sp_http_session_t *session, c
     curl_easy_setopt(curl, CURLOPT_URL, url);
 
     /* headers */
-    sp_http_headers_t *headers = sp_http_session_headers(session);
     struct curl_slist *curl_headers = sp_headers_2_curl_headers(headers);
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, curl_headers);
 
+    /* ignore signal */
     curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
 
     /* timeout */
-    if (s->timeout > 0)
+    if (timeout > 0)
     {
-        curl_easy_setopt(curl, CURLOPT_TIMEOUT, s->timeout);        
+        curl_easy_setopt(curl, CURLOPT_TIMEOUT, timeout);        
     }
 
     sp_http_response_t *res = sp_http_response_new();
@@ -222,12 +149,14 @@ static sp_http_response_t *sp_http_session_perform(sp_http_session_t *session, c
     return res;
 }
 
-sp_http_response_t *sp_http_session_get(void *session, const char *url)
+sp_http_response_t *sp_http_session_get(void *session, const char *url,
+    sp_json_t *headers, int timeout)
 {
-    return sp_http_session_perform(session, url);
+    return sp_http_session_perform(session, url, headers, timeout);
 }
 
-sp_http_response_t *sp_http_session_post(void *session, const char *url, const char *payload, int length)
+sp_http_response_t *sp_http_session_post(void *session, const char *url,
+    sp_json_t *headers, int timeout, const char *payload, int length)
 {
     sp_return_val_if_fail(session && url, NULL);
 
@@ -239,14 +168,12 @@ sp_http_response_t *sp_http_session_post(void *session, const char *url, const c
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, payload);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, length);
 
-    return sp_http_session_perform(session, url);
+    return sp_http_session_perform(session, url, headers, timeout);
 }
 
 sp_http_response_t *sp_http_response_new()
 {
     sp_http_response_t *res = sp_calloc(1, sizeof(sp_http_response_t));
-
-    sp_http_headers_init(&res->headers);
 
     res->raw_headers = sp_string_buffer_new(0);
     res->raw_body = sp_string_buffer_new(0);
@@ -261,17 +188,17 @@ void sp_http_response_free(sp_http_response_t *res)
     sp_string_buffer_free(res->raw_body);
     sp_string_buffer_free(res->raw_headers);
 
-    sp_http_headers_fini(&res->headers);
+    sp_free(res);
 }
 
-static struct curl_slist *sp_headers_2_curl_headers(sp_http_headers_t *headers)
+static struct curl_slist *sp_headers_2_curl_headers(sp_json_t *headers)
 {
-    sp_return_val_if_fail(headers && headers->headers, NULL);
+    sp_return_val_if_fail(headers, NULL);
 
     struct curl_slist *curl_headers = NULL;
 
     sp_json_t *item = NULL;
-    sp_json_foreach(item, headers->headers)
+    sp_json_foreach(item, headers)
     {
         char header_kv[1024];
         sp_string_clear(header_kv);
