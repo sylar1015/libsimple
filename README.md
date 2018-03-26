@@ -7,19 +7,7 @@ wrapper for common functions, such as memory, string, regex, etc ...
 
 wrapper for 3rd party functions, such as reactor, xml, etc ...
 
-reactor is based on libevent, to use reactor api, you need to install libevent yourself;
-
-Or "make libevent" before "make" to make libevent locally;
-
-log is based on zlog, you need to install zlog yourself;
-
-Or "make zlog" before "make" to make zlog locally;
-
-xml is based on libxml2/xpath, to use xml api, you need to install libxml2 yourself;
-
-task is based on tipc, to use task api, you need to install tipc yourself
-
-http is based on curl, to use http api, you need to install curl yourself
+git submodule update --init to install submodules
 
 To Be Continued ...
 
