@@ -35,6 +35,7 @@
 #include "sp_task.h"
 #include "sp_json.h"
 #include "sp_http.h"
+#include "sp_hash.h"
 #include "sp_socket.h"
 #include "sp_string.h"
 #include "sp_macros.h"

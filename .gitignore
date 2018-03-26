@@ -2,9 +2,9 @@
 libsimple.*
 
 #3party
-3party/cJSON/
-3party/libevent/
-3party/zlog/
+#3party/cJSON/
+#3party/libevent/
+#3party/zlog/
 
 #compile files
 tests/a.out

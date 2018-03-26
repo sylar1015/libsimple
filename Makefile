@@ -26,19 +26,13 @@ shared:
 	gcc --shared objs/*.o -o lib/libsp.so
 
 libevent:
-	cd 3party/ && tar zxvf libevent-2.1.8-stable.tar.gz && mv libevent-2.1.8-stable libevent
-	cd 3party/ && rm -rf libevent-2.1.8-stable.tar.gz
-	cd 3party/libevent && ./configure && make && make install
+	cd 3party/libevent && ./autogen.sh && ./configure && make && make install
 
 zlog:
-	cd 3party/ && tar zxvf zlog-latest-stable.tar.gz && mv zlog-latest-stable zlog
-	cd 3party/ && rm -rf zlog-latest-stable.tar.gz
 	cd 3party/zlog && make && mkdir -p /usr/local/include/zlog && cp -rf src/*.h /usr/local/include/zlog/ && cp -rf src/libzlog.so* /usr/local/lib/
 
 cjson:
-	cd 3party/ && unzip cJSON-1.7.5.zip && mv cJSON-1.7.5 cJSON
-	mkdir -p /usr/local/include/cjson && cd 3party/cJSON && make
-	cd 3party/cJSON && cp -rf libcjson.so* /usr/local/lib/ && cp cJSON.h /usr/local/include/cjson/
+	cd 3party/cjson && make && cp -rf libcjson.so* /usr/local/lib/ && cp cJSON.h /usr/local/include/cjson/
 
 all:
 	make test

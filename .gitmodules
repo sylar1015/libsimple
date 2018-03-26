@@ -1,0 +1,10 @@
+[submodule "3party/libevent"]
+	path = 3party/libevent
+	url = https://github.com/nmathewson/Libevent
+    branch = release-2.1.8-stable
+[submodule "3party/cjson"]
+	path = 3party/cjson
+	url = https://github.com/DaveGamble/cJSON
+[submodule "3party/zlog"]
+	path = 3party/zlog
+	url = https://github.com/HardySimpson/zlog
