@@ -28,6 +28,11 @@ typedef void *(*sp_thread_callback) (void *);
 void *sp_thread_new(sp_thread_callback cb, void *arg);
 void sp_thread_free(void *h);
 
+void *sp_lock_new();
+void sp_lock_acquire(void *lock);
+void sp_lock_release(void *lock);
+void sp_lock_free(void *lock);
+
 void *sp_tls_new();
 void sp_tls_set(void *h, void *ptr);
 void *sp_tls_get(void *h);

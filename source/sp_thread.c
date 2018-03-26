@@ -46,6 +46,40 @@ void sp_thread_free(void *handle)
     sp_free(h);
 }
 
+void *sp_lock_new()
+{
+    pthread_mutex_t *lock = sp_calloc(1, sizeof(pthread_mutex_t));
+
+    pthread_mutex_init(lock, NULL);
+
+    return lock;
+}
+
+void sp_lock_acquire(void *lock)
+{
+    sp_return_if_fail(lock);
+
+    pthread_mutex_lock(lock);
+}
+
+void sp_lock_release(void *lock)
+{
+    sp_return_if_fail(lock);
+
+    pthread_mutex_unlock(lock);
+}
+
+void sp_lock_free(void *lock)
+{
+    sp_return_if_fail(lock);
+
+    pthread_mutex_t *lk = (pthread_mutex_t *)lock;
+
+    pthread_mutex_destroy(lk);
+
+    sp_free(lk);
+}
+
 void *sp_tls_new()
 {
     pthread_key_t *h = sp_malloc(sizeof(pthread_key_t));
