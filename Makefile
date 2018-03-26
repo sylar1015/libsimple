@@ -38,6 +38,11 @@ all:
 	make test
 	make shared
 
+install:
+	mkdir -p /usr/local/include/simple
+	cp -rf include/* /usr/local/include/simple/
+	cp lib/libsp.so* /usr/local/lib
+
 test:
 	gcc ${INCLUDE} ${SOURCE} ${CFLAGS} ${LDFLAGS} tests/test.c -o tests/a.out
 
