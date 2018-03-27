@@ -34,6 +34,7 @@ bool sp_string_equal(const char *str1, const char *str2);
 bool sp_string_startswith(const char *str, const char*sub);
 bool sp_string_endswith(const char *str, const char *sub);
 int sp_string_find(const char *str, const char *sub);
+char *sp_string_between(const char *str, const char *start, const char *end, char *sub);
 void sp_string_append(char *buffer, const char *format, ...);
 void sp_string_trim_left(const char *buffer, char *trim_buffer);
 void sp_string_trim_right(const char *buffer, char *trim_buffer);

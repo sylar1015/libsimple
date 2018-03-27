@@ -6,7 +6,7 @@ INCLUDE:=-Iinclude \
 
 SOURCE:=${wildcard source/*.c}
 
-CFLAGS:= #-fpermissive
+CFLAGS:= -w #-fpermissive
 
 LDFLAGS:=-L/usr/local/lib/ -levent -lxml2 -lzlog -lpthread -lcjson -lcurl
 
@@ -41,7 +41,7 @@ all:
 install:
 	mkdir -p /usr/local/include/simple
 	cp -rf include/* /usr/local/include/simple/
-	cp lib/libsp.so* /usr/local/lib
+	cp -rf lib/libsp.so* /usr/local/lib
 
 test:
 	gcc ${INCLUDE} ${SOURCE} ${CFLAGS} ${LDFLAGS} tests/test.c -o tests/a.out

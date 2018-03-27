@@ -40,6 +40,7 @@ inline void sp_string_copy(char *dst, const char *src)
 void sp_string_ncopy(char *dst, const char *src, int n)
 {
     strncpy(dst, src, n);
+    dst[n] = 0;
 }
 
 inline void sp_string_clear(char *str)
@@ -61,6 +62,22 @@ int sp_string_find(const char *str, const char *sub)
 {
     const char *p = strstr(str, sub);
     return p ? p - str : -1;
+}
+
+char *sp_string_between(const char *str, const char *start, const char *end, char *sub)
+{
+    sp_return_val_if_fail(str && start && end && sub, NULL);
+
+    int pos_start = sp_string_find(str, start) + sp_string_length(start);
+    sp_return_val_if_fail(pos_start >= 0, NULL);
+    
+    int length = sp_string_find(str + pos_start, end);
+    sp_return_val_if_fail(length >= 0, NULL);
+
+    sp_string_ncopy(sub, str + pos_start, length);
+    sub[length] = 0;
+
+    return sub;
 }
 
 bool sp_string_startswith(const char *str, const char* sub)

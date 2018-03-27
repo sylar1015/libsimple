@@ -16,6 +16,7 @@ static int test_service();
 static int test_list();
 static int test_string_buffer();
 static int test_http();
+static int test_ini();
 
 
 static test_case_t test_cases[] = {
@@ -30,6 +31,7 @@ static test_case_t test_cases[] = {
     {"test_list", test_list},
     {"test_string_buffer", test_string_buffer},
     {"test_http", test_http},
+    {"test_ini", test_ini},
 };
 
 int main()
@@ -222,6 +224,11 @@ static int test_string()
     sp_string_trim(str, buffer);
     sp_return_val_if_fail(sp_string_equal(buffer, "hello"), -1);
 
+    str = "[listen_address]\r\n";
+    sp_return_val_if_fail(sp_string_between(str, "[", "]", buffer), -1);
+
+    sp_return_val_if_fail(sp_string_equal(buffer, "listen_address"), -1);
+
     return 0;
 }
 
@@ -319,6 +326,20 @@ static int test_http()
     url = "http://www.sylar.com.cn";
     res = sp_http_get(url, NULL, 1);
     sp_return_val_if_fail(!res, -1);
+
+    return 0;
+}
+
+static int test_ini()
+{
+    void *h = sp_ini_parse_file("./test.ini");
+    sp_return_val_if_fail(h, -1);
+
+    const char *string = sp_ini_get_string(h, "collect", "address");
+    sp_return_val_if_fail(sp_string_equal(string, "0.0.0.0"), -1);
+
+    int port = sp_ini_get_int(h, "collect", "port");
+    sp_return_val_if_fail(port == 8080, -1);
 
     return 0;
 }
