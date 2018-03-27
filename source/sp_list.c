@@ -178,7 +178,7 @@ void sp_list_pop(void *list, sp_list_node_t *node)
 
     sp_list_t *l = (sp_list_t *)list;
 
-    if (l->free_func)
+    if (l->free_func && node->val)
     {
         l->free_func(node->val);
     }
