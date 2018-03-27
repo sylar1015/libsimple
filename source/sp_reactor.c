@@ -121,7 +121,7 @@ void sp_reactor_run(void *handle, int flag)
 static void reactor_event_callback(int sock, short flag, void *arg)
 {
     sp_arg_t *sp_arg = (sp_arg_t *)arg;
-    sp_arg->cb(sock, sp_arg);
+    sp_arg->cb(sock, sp_arg->arg);
 }
 
 static void *reactor_thread_callback(void *arg)
