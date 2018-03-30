@@ -98,3 +98,8 @@ uint64_t sp_timeofday()
 
     return (tv.tv_sec * 1000000 + tv.tv_usec);
 }
+
+void sp_usleep(uint32_t usec)
+{
+    usleep(usec);
+}

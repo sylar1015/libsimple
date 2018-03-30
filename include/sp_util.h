@@ -36,6 +36,7 @@ int sp_regex(const char *pattern, const char *text, ...);
 
 uint64_t sp_now();
 uint64_t sp_timeofday();
+void sp_usleep(uint32_t usec);
 
 #ifdef __cplusplus
 }

@@ -40,7 +40,7 @@ void sp_hashtable_remove(sp_hashtable_t *table, const void *key);
 sp_hashtable_t *sp_hashtable_begin(sp_hashtable_t *table);
 sp_hashtable_t *sp_hashtable_next(sp_hashtable_t *table, sp_hashtable_t *entry);
 
-#define sp_hashtable_foreach(table, entry) \
+#define sp_hashtable_foreach(entry, table) \
     for(entry = sp_hashtable_begin(table); entry; entry = sp_hashtable_next(table, entry))
 
 unsigned int sp_hashtable_str_hash(const void *str);

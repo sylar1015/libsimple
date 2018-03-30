@@ -36,7 +36,7 @@ extern "C"
 #define __used__ __attribute__ ((used))
 #define __unused__ __attribute__ ((unused))
 #define __packed__ __attribute__((packed))
-#define __align(x)__ __attribute__((aligned(x)))
+#define __align__(x) __attribute__((aligned(x)))
 #define __align_max__ __attribute__((aligned))
 #define likely(x) __builtin_expect((x), 1)
 #define unlikely(x) __builtin_expect((x), 0)

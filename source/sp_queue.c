@@ -29,6 +29,7 @@ void sp_queue_push(void *queue, void *val)
 
 void sp_queue_pop(void *queue, void **val)
 {
+    sp_return_if_fail(sp_list_size(queue) > 0);
     sp_list_node_t *node = sp_list_node_front(queue);
 
     if (val)
