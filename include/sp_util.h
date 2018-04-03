@@ -38,6 +38,8 @@ uint64_t sp_now();
 uint64_t sp_timeofday();
 void sp_usleep(uint32_t usec);
 
+int sp_tcp_server_socket(const char *ipv4, int port);
+
 #ifdef __cplusplus
 }
 #endif

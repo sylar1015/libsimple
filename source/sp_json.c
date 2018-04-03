@@ -92,5 +92,14 @@ sp_json_t *sp_json_double(double val)
 
 void sp_json_free(sp_json_t *json)
 {
+    sp_return_if_fail(json);
+
     cJSON_Delete(json);
+}
+
+sp_json_t *sp_json_clone(sp_json_t *json)
+{
+    sp_return_val_if_fail(json, NULL);
+
+    return cJSON_Duplicate(json, 1);
 }

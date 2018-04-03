@@ -49,6 +49,7 @@ void sp_string_buffer_append(void *buffer, const char *string, int size);
 void sp_string_buffer_free(void *buffer);
 int sp_string_buffer_capacity(void *buffer);
 int sp_string_buffer_size(void *buffer);
+void sp_string_buffer_resize(void *buffer, int size);
 char *sp_string_buffer_string(void *buffer);
 
 #ifdef __cplusplus

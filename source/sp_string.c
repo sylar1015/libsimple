@@ -231,6 +231,20 @@ void sp_string_buffer_append(void *buffer, const char *string, int size)
     sp_string_append(buf->buffer, "%s", string);
 }
 
+void sp_string_buffer_resize(void *buffer, int size)
+{
+    sp_string_buffer_t *buf = (sp_string_buffer_t *)buffer;
+
+    if (size <= buf->capacity)
+    {
+        return;
+    }
+
+    buf->buffer = sp_realloc(buf->buffer, size);
+    buf->capacity = size;
+    buf->buffer[buf->size] = 0;
+}
+
 void sp_string_buffer_free(void *buffer)
 {
     sp_return_if_fail(buffer);

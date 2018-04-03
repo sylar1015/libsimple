@@ -45,5 +45,6 @@ sp_hashtable_t *sp_hashtable_next(sp_hashtable_t *table, sp_hashtable_t *entry);
 
 unsigned int sp_hashtable_str_hash(const void *str);
 int sp_hashtable_str_equal(const void *key1, const void *key2);
+int sp_hashtable_direct_equal(const void *key1, const void *key2);
 
 #endif

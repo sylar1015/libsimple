@@ -103,3 +103,30 @@ void sp_usleep(uint32_t usec)
 {
     usleep(usec);
 }
+
+int sp_tcp_server_socket(const char *ipv4, int port)
+{
+    int sock = sp_socket(AF_INET, SOCK_STREAM , 0);
+    sp_return_val_if_fail(sock > 0, -1);
+    sp_socket_reuseable(sock);
+
+    struct sockaddr_in addr;
+    sp_bzero(&addr, sizeof(struct sockaddr_in));
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+    addr.sin_addr.s_addr = inet_addr(ipv4);
+
+    if (sp_socket_bind(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+    {
+        sp_socket_close(sock);
+        return -1;
+    }
+
+    if (sp_socket_listen(sock, 5) < 0)
+    {
+        sp_socket_close(sock);
+        return -1;
+    }
+
+    return sock;
+}

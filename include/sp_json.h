@@ -44,6 +44,8 @@ sp_json_t *sp_json_double(double val);
 
 void sp_json_free(sp_json_t *json);
 
+sp_json_t *sp_json_clone(sp_json_t *json);
+
 #define sp_json_foreach cJSON_ArrayForEach
 
 #endif

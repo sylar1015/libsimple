@@ -17,6 +17,7 @@ static int test_list();
 static int test_string_buffer();
 static int test_http();
 static int test_ini();
+static int test_jsonrpc_server();
 
 
 static test_case_t test_cases[] = {
@@ -32,6 +33,7 @@ static test_case_t test_cases[] = {
     {"test_string_buffer", test_string_buffer},
     {"test_http", test_http},
     {"test_ini", test_ini},
+    {"test_jsonrpc_server", test_jsonrpc_server},
 };
 
 int main()
@@ -345,5 +347,41 @@ static int test_ini()
     int port = sp_ini_get_int(h, "collect", "port");
     sp_return_val_if_fail(port == 8080, -1);
 
+    return 0;
+}
+
+static sp_json_t *rpc_hello(sp_jsonrpc_t *rpc)
+{
+    printf("rpc_hello:%\n", rpc_hello);
+    sp_json_t *param = sp_json_array_item(rpc->params, 0);
+    printf("param: %x\n", param);
+    const char *message = sp_json_array_item(rpc->params, 0)->valuestring;
+
+    char buffer[512];
+    sp_string_clear(buffer);
+
+    sp_string_append(buffer, "hello %s", message);
+    printf("hello: %s\n", buffer);
+
+    return sp_json_string(buffer);
+}
+
+static sp_json_t *rpc_quit(sp_jsonrpc_t *rpc)
+{
+    sp_jsonrpc_server_free(rpc->server);
+    return NULL;
+}
+
+
+static int test_jsonrpc_server()
+{
+    void *h = sp_jsonrpc_server_new("127.0.0.1", 10000);
+
+    sp_jsonrpc_server_register(h, "hello", rpc_hello, NULL);
+    sp_jsonrpc_server_register(h, "quit", rpc_quit, NULL);
+
+    sp_jsonrpc_server_run(h);
+
+    sp_jsonrpc_server_free(h);
     return 0;
 }

@@ -43,5 +43,6 @@
 #include "sp_memory.h"
 #include "sp_thread.h"
 #include "sp_reactor.h"
+#include "sp_jsonrpc.h"
 
 #endif

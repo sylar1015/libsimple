@@ -70,3 +70,8 @@ int sp_hashtable_str_equal(const void *key1, const void *key2)
 {
     return zc_hashtable_str_equal(key1, key2);
 }
+
+int sp_hashtable_direct_equal(const void *key1, const void *key2)
+{
+    return key1 == key2;
+}
