@@ -35,7 +35,6 @@ cjson:
 	cd 3party/cjson && make && cp -rf libcjson.so* /usr/local/lib/ && cp cJSON.h /usr/local/include/cjson/
 
 all:
-	make test
 	make shared
 
 install:
@@ -44,7 +43,7 @@ install:
 	cp -rf lib/libsp.so* /usr/local/lib
 
 test:
-	gcc ${INCLUDE} ${SOURCE} ${CFLAGS} ${LDFLAGS} tests/test.c -o tests/a.out
+	gcc -g ${INCLUDE} ${SOURCE} ${CFLAGS} ${LDFLAGS} tests/test.c -o tests/a.out
 
 clean:
 	rm -rf objs

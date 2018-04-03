@@ -78,6 +78,7 @@ void *sp_http_session_new()
     sp_http_session_t *session = sp_calloc(1, sizeof(sp_http_session_t));
 
     session->curl = curl_easy_init();
+    sp_return_val_if_fail(session->curl, NULL);
 
     return session;
 }
@@ -109,6 +110,9 @@ static sp_http_response_t *sp_http_session_perform(sp_http_session_t *session,
     struct curl_slist *curl_headers = sp_headers_2_curl_headers(headers);
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, curl_headers);
 
+    //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+    curl_easy_setopt(curl, CURLOPT_FORBID_REUSE, 1);
+
     /* ignore signal */
     curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
 
@@ -116,6 +120,7 @@ static sp_http_response_t *sp_http_session_perform(sp_http_session_t *session,
     if (timeout > 0)
     {
         curl_easy_setopt(curl, CURLOPT_TIMEOUT, timeout);        
+		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, timeout);
     }
 
     sp_http_response_t *res = sp_http_response_new();
@@ -130,6 +135,7 @@ static sp_http_response_t *sp_http_session_perform(sp_http_session_t *session,
     do
     {
         CURLcode ret = curl_easy_perform(curl);
+
         if (ret != CURLE_OK)
         {
             sp_http_response_free(res);
@@ -203,7 +209,6 @@ static struct curl_slist *sp_headers_2_curl_headers(sp_json_t *headers)
         char header_kv[1024];
         sp_string_clear(header_kv);
         sp_string_append(header_kv, "%s: %s", item->string, item->valuestring);
-
         curl_headers = curl_slist_append(curl_headers, header_kv);
     }
 
@@ -228,4 +233,9 @@ static size_t sp_http_header_callback(void *data, size_t size, size_t nmemb, voi
     sp_string_buffer_append(res->raw_headers, data, length);
 
     return length;
+}
+
+void sp_http_fini()
+{
+    curl_global_cleanup();
 }

@@ -327,6 +327,10 @@ static int test_http()
     res = sp_http_get(url, NULL, 1);
     sp_return_val_if_fail(!res, -1);
 
+	url = "http://127.0.0.1:8080/api/report";
+	res = sp_http_post(url, NULL, 1, "{}", 2);
+	sp_return_val_if_fail(res, -1);
+
     return 0;
 }
 

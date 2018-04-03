@@ -54,6 +54,8 @@ sp_http_response_t *sp_http_session_post(void *session, const char *url,
 
 void sp_http_response_free(sp_http_response_t *res);
 
+void sp_http_fini();
+
 
 #ifdef __cplusplus
 }

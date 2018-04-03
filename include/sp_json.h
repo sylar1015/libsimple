@@ -40,7 +40,7 @@ void sp_json_object_add(sp_json_t *json, const char *key, sp_json_t *item);
 
 sp_json_t *sp_json_int(int val);
 sp_json_t *sp_json_string(const char *string);
-sp_json_t *sp_json_doule(double val);
+sp_json_t *sp_json_double(double val);
 
 void sp_json_free(sp_json_t *json);
 

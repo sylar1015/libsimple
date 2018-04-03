@@ -85,7 +85,7 @@ sp_json_t *sp_json_string(const char *string)
     return cJSON_CreateString(string);
 }
 
-sp_json_t *sp_json_doule(double val)
+sp_json_t *sp_json_double(double val)
 {
     return cJSON_CreateNumber(val);
 }
