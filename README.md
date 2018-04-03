@@ -7,6 +7,10 @@ wrapper for common functions, such as memory, string, regex, etc ...
 
 wrapper for 3rd party functions, such as reactor, xml, etc ...
 
+sp_http is for restful client
+
+sp_jsonrpc is for jsonrpc
+
 git submodule update --init to install submodules
 
 To Be Continued ...
