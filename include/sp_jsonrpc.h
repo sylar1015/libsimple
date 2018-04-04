@@ -41,6 +41,8 @@ void sp_jsonrpc_server_free(void *h);
 
 int sp_jsonrpc_server_run(void *h);
 
+int sp_jsonrpc_server_stop(void *h);
+
 int sp_jsonrpc_server_register(void *h, const char *method, sp_jsonrpc_func_t func, void *arg);
 
 int sp_jsonrpc_server_unregister(void *h, const char *method);

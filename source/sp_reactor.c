@@ -118,6 +118,13 @@ void sp_reactor_run(void *handle, int flag)
     }
 }
 
+void sp_reactor_stop(void *handle)
+{
+    sp_reactor_handle_t *h = (sp_reactor_handle_t *)handle;
+
+    event_base_loopbreak(h->base);
+}
+
 static void reactor_event_callback(int sock, short flag, void *arg)
 {
     sp_arg_t *sp_arg = (sp_arg_t *)arg;
@@ -146,7 +153,7 @@ static void *reactor_attach(
     
     event_base_set(h->base, ev);
     event_add(ev, NULL);
-    
+
     sp_attach_t *attach_h = sp_calloc(1, sizeof(sp_attach_t));
     attach_h->ev = ev;
     attach_h->arg = inner_arg;

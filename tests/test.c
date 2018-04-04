@@ -122,7 +122,10 @@ static int test_xml()
     void *node = sp_xml_get_child(result.nodes[0], "name");
     sp_return_val_if_fail(node, -1);
 
-    sp_return_val_if_fail(sp_string_equal("Hello", sp_xml_get_text(node)), -1);
+    char *text = sp_xml_get_text(node);
+    sp_return_val_if_fail(sp_string_equal("Hello", text), -1);
+
+    sp_free(text);
     
     sp_xml_free(h);
 
@@ -347,6 +350,8 @@ static int test_ini()
     int port = sp_ini_get_int(h, "collect", "port");
     sp_return_val_if_fail(port == 8080, -1);
 
+    sp_ini_free(h);
+
     return 0;
 }
 
@@ -354,7 +359,6 @@ static sp_json_t *rpc_hello(sp_jsonrpc_t *rpc)
 {
     printf("rpc_hello:%\n", rpc_hello);
     sp_json_t *param = sp_json_array_item(rpc->params, 0);
-    printf("param: %x\n", param);
     const char *message = sp_json_array_item(rpc->params, 0)->valuestring;
 
     char buffer[512];
@@ -368,7 +372,10 @@ static sp_json_t *rpc_hello(sp_jsonrpc_t *rpc)
 
 static sp_json_t *rpc_quit(sp_jsonrpc_t *rpc)
 {
-    sp_jsonrpc_server_free(rpc->server);
+    sp_jsonrpc_server_stop(rpc->server);
+
+    /* return NULL, need to free session */
+    sp_jsonrpc_session_close(rpc->session);
     return NULL;
 }
 

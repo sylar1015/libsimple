@@ -37,6 +37,7 @@ void *sp_reactor_attach(void *h, int sock, sp_reactor_callback cb, void *arg);
 void *sp_reactor_attach_once(void *h, int sock, sp_reactor_callback cb, void *arg);
 void sp_reactor_detach(void *ev);
 void sp_reactor_run(void *h, int flag);
+void sp_reactor_stop(void *h);
 
 #ifdef __cplusplus
 }

@@ -95,6 +95,16 @@ int sp_jsonrpc_server_run(void *h)
     return 0;
 }
 
+int sp_jsonrpc_server_stop(void *h)
+{
+    sp_return_val_if_fail(h, -1);
+    sp_jsonrpc_server_t *server = (sp_jsonrpc_server_t *)h;
+
+    sp_reactor_stop(server->reactor);
+
+    return 0;
+}
+
 int sp_jsonrpc_server_register(void *h, const char *method, sp_jsonrpc_func_t func, void *arg)
 {
     sp_jsonrpc_server_t *server = (sp_jsonrpc_server_t *)h;
@@ -211,10 +221,16 @@ static void handle_read(int sock, void *arg)
             /* dispatch to otherwhere */
         }
 
+        sp_json_free(json);
         return;
     } while(0);
 
     send_error(session, -32603, "rpc failed", id);
+
+    if (json)
+    {
+        sp_json_free(json);
+    }
 }
 
 static void session_close(sp_jsonrpc_session_t *session)
@@ -223,6 +239,7 @@ static void session_close(sp_jsonrpc_session_t *session)
 
     sp_reactor_detach(session->ev);
     sp_socket_close(session->sock);
+    sp_string_buffer_free(session->buffer);
     sp_free(session);
 }
 
