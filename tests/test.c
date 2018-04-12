@@ -386,7 +386,7 @@ static int test_jsonrpc_server()
     sp_jsonrpc_server_register(h, "hello", rpc_hello, NULL);
     sp_jsonrpc_server_register(h, "quit", rpc_quit, NULL);
 
-    sp_jsonrpc_server_run(h);
+    sp_jsonrpc_server_run(h, 0);
 
     sp_jsonrpc_server_free(h);
     return 0;
