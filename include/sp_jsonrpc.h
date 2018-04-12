@@ -31,6 +31,8 @@ typedef struct
     sp_json_t *id;
     void *session;
     void *server;
+
+    void *priv;
 } sp_jsonrpc_t;
 
 typedef sp_json_t *(*sp_jsonrpc_func_t)(sp_jsonrpc_t *rpc);
