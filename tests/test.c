@@ -357,7 +357,6 @@ static int test_ini()
 
 static sp_json_t *rpc_hello(sp_jsonrpc_t *rpc)
 {
-    printf("rpc_hello:%\n", rpc_hello);
     sp_json_t *param = sp_json_array_item(rpc->params, 0);
     const char *message = sp_json_array_item(rpc->params, 0)->valuestring;
 

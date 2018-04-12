@@ -85,12 +85,12 @@ void sp_jsonrpc_server_free(void *h)
     sp_free(h);
 }
 
-int sp_jsonrpc_server_run(void *h)
+int sp_jsonrpc_server_run(void *h, int flag)
 {
     sp_return_val_if_fail(h, -1);
     sp_jsonrpc_server_t *server = (sp_jsonrpc_server_t *)h;
 
-    sp_reactor_run(server->reactor, 0);
+    sp_reactor_run(server->reactor, flag);
 
     return 0;
 }

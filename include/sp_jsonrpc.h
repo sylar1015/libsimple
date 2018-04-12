@@ -39,7 +39,7 @@ void *sp_jsonrpc_server_new(const char *ipv4, int port);
 
 void sp_jsonrpc_server_free(void *h);
 
-int sp_jsonrpc_server_run(void *h);
+int sp_jsonrpc_server_run(void *h, int reactor_flag);
 
 int sp_jsonrpc_server_stop(void *h);
 

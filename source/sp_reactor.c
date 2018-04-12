@@ -22,7 +22,7 @@
 typedef struct
 {
    struct event_base *base;
-   void *thread_handle;
+   void *thread;
 } sp_reactor_handle_t;
 
 typedef struct
@@ -75,9 +75,11 @@ void sp_reactor_free(void *handle)
 
     event_base_loopbreak(h->base);
 
-#if 0
-    if (h->thread_handle)
-        sp_thread_free(h->thread_handle);
+#if 1
+    if (h->thread)
+    {
+        sp_thread_free(h->thread);
+    }
 #endif
 
     event_base_free(h->base);
@@ -114,7 +116,7 @@ void sp_reactor_run(void *handle, int flag)
     }
     else
     {
-        //h->thread_handle = sp_thread_new(reactor_thread_callback, h);
+        h->thread = sp_thread_new(reactor_thread_callback, h);
     }
 }
 
@@ -136,6 +138,8 @@ static void *reactor_thread_callback(void *arg)
     sp_reactor_handle_t *h = (sp_reactor_handle_t *)arg;
 
     event_base_dispatch(h->base);
+
+    return NULL;
 }
 
 static void *reactor_attach(
