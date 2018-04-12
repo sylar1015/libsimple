@@ -25,6 +25,11 @@ extern "C"
 {
 #endif
 
+#define SP_MILLISECOND (1000)
+#define SP_SECOND (1000 * SP_MILLISECOND)
+#define SP_MINUTE (60 * SP_SECOND)
+#define SP_HOUR (60 * SP_MINUTE)
+
 uint32_t sp_log2(uint32_t x);
 uint32_t sp_roundup2n(uint32_t x);
 uint32_t sp_roundup4(uint32_t x);
