@@ -32,6 +32,7 @@ zlog:
 	cd 3party/zlog && make && mkdir -p /usr/local/include/zlog && cp -rf src/*.h /usr/local/include/zlog/ && cp -rf src/libzlog.so* /usr/local/lib/
 
 cjson:
+	mkdir -p /usr/local/include/cjson
 	cd 3party/cjson && make && cp -rf libcjson.so* /usr/local/lib/ && cp cJSON.h /usr/local/include/cjson/
 
 all:
